@@ -1,0 +1,85 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: drf
+    volumes:
+      - ./backend:/app/backend 
+    env_file:
+      - .env
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      - db
+      - redis
+    command: >
+      sh -c "
+      dockerize -wait tcp://db:5432 -timeout 30s &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      exec daphne -b 0.0.0.0 -p 8000 coding_helper.asgi:application"
+# exec python manage.py runserver 0.0.0.0:8000 &&
+# 로컬 세팅 : exec daphne coding_helper.asgi:application --port 8000
+# daphne 또는 python manage.py runserver 0.0.0.0:8000 && 둘 중 하나만 실행
+      
+  db:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${POSTGRES_VOLUME} # 볼륨 저장
+      - ${POSTGRES_INIT} # 컨테이너 생성 시 초기화 sql 파일
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    env_file:
+      - .env
+    ports:
+      - "5050:80"
+    # 볼륨 설정
+    volumes:
+      - ${PGADMIN_VOLUME}
+
+  redis:
+    image: redis:7.4.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+
+  nginx:
+    image: nginx:1.27.3
+    container_name: nginx
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ${NGINX_VOLUME}
+      - ${NGINX_STATIC}
+      - ${NGINX_MEDIA}
+# volumes: {}
