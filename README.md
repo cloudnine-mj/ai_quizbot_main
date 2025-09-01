@@ -310,10 +310,11 @@ modified_html = soup.prettify()
 return modified_html
 ```
 (원인) 
+아래 구문에서 div 태그의 class 속성은 그대로 남아있지만, pre 태그의 class 속성이 사라져서 code_blocks 자체가 생성되지 않았음.
 ```py
 soup = BeautifulSoup(response.text, "html.parser")
 ```
-위 구문에서 div 태그의 class 속성은 그대로 남아있지만, pre 태그의 class 속성이 사라져서 code_blocks 자체가 생성되지 않았음<br>
+<br>
 (수정)
 pre 태그 안의 code 태그가 있는 경우에만 코드내용이 추출되므로, pre태그의 검색조건에서 class 구문 삭제
 ```py
@@ -1066,13 +1067,13 @@ const detail_response = await quizApiRequest.get(`/feedback/detail/${session_no}
 
 배포에서의 구글 소셜 로그인의 리다이렉트 시에 400번 에러가 뜨며 구글 소셜 로그인이 되지 못하는 문제가 있었습니다.
 
-### 문제 상황 파악
+## 문제 상황 파악
 
 로컬에서의 구글 소셜 로그인의 경우
 
 프론트의 리다이렉트 경로를 로컬의 경우에만 http 리다이렉트를 허용하고 그 외는 허용하지 않는 상황이었습니다.
 
-### 해결
+## 해결
 
 서버 자체를 HTTPS → HTTP 포트포워딩을 통해 프론트엔드에 백엔드로 보내는 방법 자체를 HTTPS로도 접근이 가능하게 해 해결하였습니다.
 
