@@ -311,12 +311,15 @@ return modified_html
 ```
 (원인) 
 아래 구문에서 div 태그의 class 속성은 그대로 남아있지만, pre 태그의 class 속성이 사라져서 code_blocks 자체가 생성되지 않았음.
+
 ```py
 soup = BeautifulSoup(response.text, "html.parser")
 ```
+
 <br>
 (수정)
 pre 태그 안의 code 태그가 있는 경우에만 코드내용이 추출되므로, pre태그의 검색조건에서 class 구문 삭제
+
 ```py
 code_blocks = soup.find_all("pre")
 ```
