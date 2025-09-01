@@ -237,7 +237,7 @@ with open("references.json", 'r', encoding='utf-8') as file:
 ```bash
 smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted.
 ```
-(원인) 2025년 1월부터 구글의 인증정책이 변경되어 "보안 수준이 낮은 앱의 액세스" 를 활성화하는게 불가능하도록 변경됨
+(원인) 2025년 1월부터 구글의 인증정책이 변경되어 "보안 수준이 낮은 앱의 액세스" 를 활성화하는게 불가능하도록 변경됨<br>
 (수정) 해당 계정의 실제 비밀번호 대신 2차인증 후 앱 비밀번호를 입력하는 방식으로 변경
   </details>
 
@@ -254,7 +254,7 @@ smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepte
         <span class="n">models</span>
         ...
 ```
-(원인) 위와 같이 코드 내용이 각 단어별로 span 태그에 분할되어 있어서 텍스트 추출 시 누락
+(원인) 위와 같이 코드 내용이 각 단어별로 span 태그에 분할되어 있어서 텍스트 추출 시 누락 <br>
 (수정)  
 ```html
 <div class="highlight"> 안의 <pre> 태그 추출 및 원본에 삽입  
@@ -313,7 +313,7 @@ return modified_html
 ```py
 soup = BeautifulSoup(response.text, "html.parser")
 ```
-위 구문에서 div 태그의 class 속성은 그대로 남아있지만, pre 태그의 class 속성이 사라져서 code_blocks 자체가 생성되지 않았음
+위 구문에서 div 태그의 class 속성은 그대로 남아있지만, pre 태그의 class 속성이 사라져서 code_blocks 자체가 생성되지 않았음<br>
 (수정)
 pre 태그 안의 code 태그가 있는 경우에만 코드내용이 추출되므로, pre태그의 검색조건에서 class 구문 삭제
 ```py
@@ -329,7 +329,7 @@ code_blocks = soup.find_all("pre")
 2025-01-17 17:24:54 Not Found: /ws/chat/test_room/
 2025-01-17 17:24:54 [17/Jan/2025 17:24:54] "GET /ws/chat/test_room/ HTTP/1.1" 404 2655
    ```
-(원인) Django의 runserver에서는 ASGI Websocket 을 완전히 지원하지 않기 때문
+(원인) Django의 runserver에서는 ASGI Websocket 을 완전히 지원하지 않기 때문<br>
 (수정) daphne을 통해서 ASGI Websocket 환경 구축
 ```bash
 1. daphne 설치 및 등록(requirements.txt)
@@ -421,7 +421,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
    ```js
 if (popQuizTimeLeft <= 1 && !popQuizActive) { 
    ```
-(원인) setPopQuizTimeLeft(timeToNextQuiz / 1000); 로 업데이트된 상태 업데이트는 즉시 적용되지 않고 React의 렌더링 사이클에 따라 다음 렌더링에서 업데이트된 값이 적용되는 비동기 변수이기 떄문에 발생.
+(원인) setPopQuizTimeLeft(timeToNextQuiz / 1000); 로 업데이트된 상태 업데이트는 즉시 적용되지 않고 React의 렌더링 사이클에 따라 다음 렌더링에서 업데이트된 값이 적용되는 비동기 변수이기 떄문에 발생.<br>
 (수정) 비동기 변수가 아닌 실제 변수를 사용하여 해결
 ```js
 if (timeToNextQuiz <= 1 && !popQuizActive) { 
@@ -461,7 +461,7 @@ if data["type"] == "pop_quiz_active":
         )
       return
 ```
-(원인) POP QUIZ 생성시간이 되었을 때, 퀴즈를 Broadcast 하는 과정에서 모든 참여자의 인원수만큼 문제가 출력
+(원인) POP QUIZ 생성시간이 되었을 때, 퀴즈를 Broadcast 하는 과정에서 모든 참여자의 인원수만큼 문제가 출력<br>
 
 (수정)
 1. isOwner 로 방이 최초 생성되었을 때 방장을 나타내는 변수 설정. 이후 isOwner 로 설정된 유저가 대화방을 떠날 떄(웹소켓이 DISCONNECT) 다른 참여자들 그룹 중 가장 먼저 입장한 유저의 isOwner 값 True 로 변경
@@ -530,6 +530,7 @@ if (socket.current.readyState === WebSocket.OPEN) {
 }
 ```
 
+<br>
 (수정) WebSocket 연결이 DISCONNECT 되기 전에 beforeunload 이벤트를 추가하여 페이지를 떠날 때 leave 메시지를 전송해서 참여목록 갱신
 ```js
 const handleBeforeUnload = () => {
@@ -553,7 +554,7 @@ return () => {
 <details>
   <summary> 회원가입 페이지에서 정상적인 가입 요청 시 오류 문구가 "회원가입 실패"로만 노출되는 현상</summary>
 
-(원인) API 에 요청된 request.data 를 serializer가 검증하는 과정에서 검증 실패에 대한 안내문구가 없어서 발생
+(원인) API 에 요청된 request.data 를 serializer가 검증하는 과정에서 검증 실패에 대한 안내문구가 없어서 발생<br>
 (수정) 검증에 대한 안내문구 추가 + 비밀번호 중복검증 삭제 + username 과 email 중복 검증 추가
   </details>
   <details>
@@ -618,7 +619,7 @@ command: >
   <details>
   <summary> delete요청의 body가 누락되는 문제</summary>
 
-(원인) delete요청의 body의 입력 필드 및 예시가 UI에 표시되지 않는 문제 </br>
+(원인) delete요청의 body의 입력 필드 및 예시가 UI에 표시되지 않는 문제 <br>
 (수정) delete 의 request body는 지원하지 않는 것으로 확인
 
 description에 상세하게 기술하는 것으로 대체
@@ -686,7 +687,7 @@ CHUNK_OVERLAP = 200
 
 LLM으로 퀴즈 생성 시 낮은 확률이지만 원하는 JSON형태를 반환하지 않는 경우 발생
 
-### 원인
+## 원인
 
 JSON 형식 반환을 프롬프트로 설정, 일정 확률로 다른 형태의 구조로 생성하거나 몇가지 항목 누락
 
@@ -747,11 +748,11 @@ return json format, do not include ```json```
 <details>
   <summary> 퀴즈 생성 시 1번과 2번 선택지에만 정답을 생성하는 문제</summary>
 
-# 문제
+## 문제
 
 퀴즈 LLM을 생성하면 1번 또는 2번 선택지만을 정답으로 생성\
 
-# 해결
+## 해결
 
 정답으로 들어갈 번호를 난수 생성한 뒤에 문제 생성
 
@@ -786,7 +787,7 @@ def quizz_chain(content, input):
   <details>
   <summary> 컨테이너 빌드 시 DB 오류 발생</summary>
 
-# 문제
+## 문제
 
 컨테이너 빌드 시 DB에 파일 누락 또는 지속석인 오류 발생
 
@@ -810,7 +811,7 @@ def quizz_chain(content, input):
       - ./db/init:/docker-entrypoint-initdb.d # 컨테이너 생성 시 초기화 sql 파일
 ```
 
-# 해결
+## 해결
 
 테스트 후 마이그레이션 로그 파일, DB파일 및 차가로 생성된 경로 폴더도 모두 삭제
   </details>
@@ -824,7 +825,7 @@ def quizz_chain(content, input):
 
 (원인)
  - [Errno 13] Permission denied: '/var/lib/pgadmin/sessions’
-- 원인 : /var/lib/pgadmin/sessions 디렉터리에 대해 쓰기 권한이 없어서 발생한 문제
+- 원인 : /var/lib/pgadmin/sessions 디렉터리에 대해 쓰기 권한이 없어서 발생한 문제<br>
   (수정) 
   호스트 시스템의 디렉토리 권한을 변경하여 컨테이너가 사용할 수 있도록 설정
   sudo chown -R 5050:5050 /home/ubuntu/ReadRiddle/DB_test/pgadmin/
@@ -1007,7 +1008,7 @@ import React, { useRef, useState, useEffect } from 'react';
 
 (원인) 같은 퀴즈 세션에 대해서만 답변, 결과가 업데이트 되던 문제
 현재 백엔드에서 가져오는 id 값은 퀴즈 세션의 id값이 아닌 존재하지 않은 값이기 때문에 나오는 디폴트 값인 1이었습니다.
-</br>
+<br>
 (수정) 현재 백엔드에서 가져오는 id 값은 퀴즈 세션의 id값이 아닌 존재하지 않은 값이기 때문에 나오는 디폴트 값인 1이었습니다.
 즉, 백엔드 측에서 보내주는 id 값이 전체 퀴즈 세션의 id로 오해했기 때문에 발생했던 문제였습니다.
 
@@ -1091,7 +1092,7 @@ const detail_response = await quizApiRequest.get(`/feedback/detail/${session_no}
 
 배포시에 보이지 말아야 할 백엔드 서버 url이 보여 보안에 취약한 문제
 
-### 문제 파악
+## 문제 파악
 
 `DEBUG = False` 였기 때문에 보이지 말아야 했을 개발자 페이지가 보였습니다.
 
